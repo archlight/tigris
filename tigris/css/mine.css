@@ -1,0 +1,67 @@
+body {
+    background-color: #1ab394
+}
+
+#content{
+    margin: 0px 20px
+}
+
+.row {
+    margin: 0px 40px 20px 40px
+}
+
+.row .no-side-margin {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.navbar {
+    margin-bottom: 0px
+}
+
+
+input.datepicker {
+    width: 75px;
+}
+input#fund {
+    width: 65px;
+    padding: 5px
+}
+
+.label {
+    margin-left: 10px
+}
+
+.panel-editor {
+    border-top-width: 4px;
+    border-radius: 0px;
+}
+.panel-editor .panel-heading {
+    padding : 5px 30px;
+    color: #676a6c;
+    background-color: #f3f3f4;
+}
+
+.agile-detail a {
+    font-size: 10px;
+}
+
+.agile-detail span {
+    font-size: 10px;
+}
+
+#filename {
+
+    padding-top: 3px;
+    padding-bottom: 3px;
+    height: 22px;
+    color: #676a6c;
+    font-size: smaller;
+    margin-right: 5px
+
+}
+
+#graph {
+    padding: 0px 20px;
+    height: 200px
+}

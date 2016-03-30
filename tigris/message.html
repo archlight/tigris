@@ -1,0 +1,11 @@
+{% extends "app.html" %}
+
+{% block content %}
+
+<div class="row">
+	<div class="alert alert-info">
+		<p>{% autoescape off %}{{ message }}{% endautoescape %}</p>
+	</div>	
+</div>
+
+{% endblock %}

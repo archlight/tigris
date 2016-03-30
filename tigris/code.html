@@ -1,0 +1,109 @@
+{% extends "app.html" %}
+
+{% block content %}
+
+{{ super() }}
+
+<div class="row">
+    <div id = "summary" class="col-md-3">
+        <ul id="modules" class="agile-list no-padding">
+            {% for item in modules %}
+                <li class="{% if item.protected %} danger-element {% else %} warning-element {% endif %}">
+                    <div class="agile-detail no-margin">
+                        {{item.filename}} <span>   by {{item.author}}</span>
+                        <a id="{{item.fid}}" href="code?id={{item.fid}}" class="pull-right">
+                            {% if item.protected %} View {% else %} Clone {% endif %}
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <ul id="codelist" class="agile-list no-padding">
+            {% for item in codelist %}
+                    <li class="{% if item.public %} warning-element {% else %} success-element {% endif %}">
+                        <div class="agile-detail no-margin">
+                            {{item.filename}}
+                            <a id="{{item.fid}}" href="code?id={{item.fid}}" class="pull-right">Edit</a>
+                        </div>
+                    </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id = "detail" class="col-md-9">
+
+        <div class="row no-side-margin">
+            <form role="form" class="form-inline no-action">
+                <div class="form-group">
+                    <input type="text" id="start" class="input-sm datepicker" placeholder="YYYY-MM-DD" value="2016-01-04">
+                </div>
+                <div class="form-group">
+                    <label for="ToDate">To</label>
+                    <input type="text" id="end" class="input-sm datepicker" placeholder="YYYY-MM-DD" value="2016-03-08">
+                </div>
+                <div class="form-group">
+                    <label for="ToDate">Symbols</label>
+                    <input type="text" id="symbols" class="input-sm" value="AAPL,GOOGL">
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span> 
+                        <input type="text" id="fund" class="input-sm" value="10000">
+                    </div>
+                </div>
+                <div class="checkbox m-r-xs">
+                    <input type="checkbox" id="useYahoo" value="useYahoo">
+                    useYahoo
+                </div>
+                <button id="run" class="btn btn-primary pull-right">Run</button>
+            </form>       
+        </div>
+
+        <div class="row no-side-margin">
+            <div class="panel panel-primary panel-editor">
+                <div id="editorsave" class="panel-heading">
+                    <form role="form" class="form-inline no-action">
+                        <div class="form-group has-success">
+                            <input type="text" id="filename" class="form-control input-sm" placeholder="Unamed" value="{{item.filename}}">
+                            <input type="hidden" id="fid" name="fid" value="{{item.fid}}">
+                        </div>
+                        <div class="checkbox m-r-xs">
+                            <input type="checkbox" id="public" value="public" {% if item.public %} checked {% endif %}>
+                            public
+                        </div>
+                        <div class="checkbox m-r-xs">
+                            <input type="checkbox" id="protected" value="protected" {% if item.protected %} checked {% endif %}>
+                            protected
+                        </div>
+                        <button id="save" class="btn btn-default btn-xs">Save</button>
+                        <span class="text-danger"></span>
+                        <span id="dep" class="pull-right">
+                            {% for name in item.modules %}
+                                <span class="label label-success">{{name}}</span>
+                            {% endfor %}
+                        </span>
+                    </form>
+                </div>
+                <div class="panel-body no-padding">
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                    <div id="graph"></div>
+                    <textarea id="code">
+                        {% if item.script %} 
+                            {{item.script}} 
+                        {% else %}
+                            {{item.docstr}}
+                        {% endif %}
+                    </textarea> 
+                </div>
+            </div>
+
+             <div id="console" class="alert"></div>            
+        </div>
+    </div>
+</div>
+{% endblock %}

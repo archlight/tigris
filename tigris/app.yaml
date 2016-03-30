@@ -1,0 +1,29 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+# Handlers match in order, put above the default handler.
+handlers:
+- url: /css
+  static_dir: css
+
+- url: /font-awesome
+  static_dir: font-awesome
+
+- url: /fonts
+  static_dir: fonts
+
+- url: /img
+  static_dir: img
+
+- url: /js
+  static_dir: js
+
+- url: /.*
+  script: tigris.app
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest

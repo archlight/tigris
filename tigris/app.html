@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZIPLINE</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/plugins/codemirror/codemirror.css" rel="stylesheet">
+    <link href="css/plugins/codemirror/elegant.css" rel="stylesheet">
+    <link href="css/plugins/datepicker/datepicker3.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/morris.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/mine.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="content" class='gray-bg' style='min-height: 600px'>
+        <div class='row border-bottom'>
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <span class="navbar-brand"> Zipline on cloud </span>
+                    </div>
+                    {% if user %}
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                {{ user.name }}
+                            </li>
+                            <li>
+                                <a href="logout">
+                                    <i class="fa fa-sign-out"></i> Log out
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </nav>
+        </div>
+        {% block content %}{% endblock %}      
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- CodeMirror -->
+    <script src="js/plugins/codemirror/codemirror.js"></script>
+    <script src="js/plugins/codemirror/mode/python/python.js"></script>
+
+    <!-- Datepicer -->
+    <script src="js/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script src="js/raphael-min.js"></script>
+    <script src="js/morris.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/mine.js"></script>
+</body>

@@ -1,0 +1,12 @@
+indexes:
+- kind: CodeBase
+  ancestor: yes
+  properties:
+  - name: fid
+  - name: filename
+  - name: author
+  - name: public
+  - name: protected
+  - name: date
+    direction: desc
+
