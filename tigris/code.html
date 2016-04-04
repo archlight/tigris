@@ -7,6 +7,12 @@
 <div class="row">
     <div id = "summary" class="col-md-3">
         <ul id="modules" class="agile-list no-padding">
+            <li class="success-element">
+                <div class="agile-detail no-margin">
+                    Start Algo
+                    <a id="new" href="code" class="pull-right"><span class="fa fa-plus"></span></a>
+                </div>
+            </li>
             {% for item in modules %}
                 <li class="{% if item.protected %} danger-element {% else %} warning-element {% endif %}">
                     <div class="agile-detail no-margin">
@@ -84,6 +90,28 @@
                     </form>
                 </div>
                 <div class="panel-body no-padding">
+                    <div id="stats">
+                        <div id = "returns">
+                            <span>RETURNS</span>
+                            <h4> -- </h4>
+                        </div>
+                        <div id = "alpha">
+                            <span>ALPHA</span>
+                            <h4> -- </h4>
+                        </div>
+                        <div id = "beta">
+                            <span>BETA</span>
+                            <h4> -- </h4>
+                        </div>
+                        <div id = "sharpe">
+                            <span>SHARPE</span>
+                            <h4> -- </h4>
+                        </div>
+                        <div id = "drawdown">
+                            <span>DRAWDOWN</span>
+                            <h4> -- </h4>
+                        </div>  
+                    </div>
                     <div class="sk-spinner sk-spinner-wave">
                         <div class="sk-rect1"></div>
                         <div class="sk-rect2"></div>

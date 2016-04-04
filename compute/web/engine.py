@@ -27,13 +27,9 @@ from gcloud import datastore
 
 from pandas import DataFrame, concat
 
-logger = logging.getLogger('')
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
-
 SYMBOLS_SUPPORTED = ['AAPL', 'GOOGL']
 
-#client = gcloud.datastore.Client('tigris-1242')
+client = gcloud.datastore.Client('tigris-1242')
 
 def run_algo(code, d):
     def load_from_datastore(stocks, start, end):
@@ -98,9 +94,11 @@ class ZiplineCompute(tornado.web.RequestHandler):
                     result['period'] = result['period'].apply(lambda x: x.strftime('%Y-%m-%d'))
 
                     self.set_header('Content-Type', 'application/json')
+                    columns = list(filter(lambda x: not x in ["transactions", "orders", "period_open", "period_close"], result.columns))
+                    self.write(result[columns].to_json(orient='records'))
 
-                    self.write(result[['period', 'algorithm_period_return']].to_json(orient='records'))
                 except Exception as e:
+                    logging.error(e)
                     self.set_status(500)
                     self.write(str(e))
                     #raise tornado.web.HTTPError(500, str(e), statusText=str(e))
@@ -121,7 +119,7 @@ class Application(tornado.web.Application):
                     static_path=os.path.join(os.path.dirname(__file__), "static"),
                     cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
                     login_url="/auth/login",
-                    debug=True
+                    debug=False
                     )
 
         tornado.web.Application.__init__(self, handlers, **settings)
@@ -131,6 +129,6 @@ class Application(tornado.web.Application):
 if __name__ == '__main__':
     app = Application()
     http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(8089)
-    logger.info("zipline started")
+    http_server.listen(8080)
+    logging.info("zipline started")
     tornado.ioloop.IOLoop.instance().start()

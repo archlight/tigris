@@ -18,10 +18,22 @@
 
     });
 
-    editor.on("change", function(cm, obj){
+    function toggle_button(){
         if (initialized && $("#save").hasClass('btn-default'))
             $("#save").toggleClass('btn-primary btn-default')
-        initialized = true        
+        initialized = true     
+    }
+
+    editor.on("change", function(cm, obj){
+        toggle_button()
+    })
+
+    $("#filename").keyup(function(event) {
+       toggle_button()
+    })
+
+    $("#editorsave form").change(function(){
+        toggle_button()
     })
 
     if(editor.lineCount()>4)
@@ -94,6 +106,10 @@
                                 li.append(div.append(a))
 
                                 $("#codelist").prepend(li)
+
+                                $("#fid").val(""+data.fid)
+                                $("#filename").val(data.filename)
+
                                 modules = data.modules    
                             } 
 
@@ -140,6 +156,12 @@
                 JSON.stringify(formdict),
                 function(data){
 
+                    console.log(data)
+
+                    datapoints = {}
+                    datapoints["period"] = data["period"]
+                    datapoints["algorithm_period_return"] = data["algorithm_period_return"]
+
                     $("#graph").show()
                     graph = Morris.Line({
                             element: 'graph',
@@ -155,10 +177,16 @@
                             lineColors: ["#1c84c6"],
                             pointStrokeColors: ["#1c84c6"]
                           });
-        
 
                     graph.setData(data)
                     $("#graph").show()
+
+                    stats = _.last(data)
+                    $("#returns h4").text((parseFloat(stats.algorithm_period_return)*100).toPrecision(4)+"%")
+                    $("#alpha h4").text(parseFloat(stats.alpha).toPrecision(4))
+                    $("#beta h4").text(parseFloat(stats.beta).toPrecision(4))
+                    $("#sharpe h4").text(parseFloat(stats.sharpe).toPrecision(4))
+                    $("#drawdown h4").text((parseFloat(stats.max_drawdown)*100).toPrecision(4) + "%")
 
                     console_display("alert-success", "alert-danger", "Algorithm run successfully")
                 },

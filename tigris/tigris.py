@@ -18,15 +18,16 @@ class MainPage(BaseHandler):
         self.render_template('landing.html')
 
 class CodeCompute(BaseHandler):
-    #url = "https://tigris-1242.appspot.com/zipline"
-    url = "http://localhost:8089/zipline"
+    url = "https://tigris-1242.appspot.com/zipline"
+    #url = "http://localhost:8089/zipline"
 
     @user_required
     def post(self):
         d = json.loads(self.request.body)
 
+        modules, _ = self._parse(d["code"])
         script = re.sub("from\s+tigris.*?\\n", "", d["code"])
-        modules, _ = self._parse(script)
+
         code = "\n\n".join([m.script for m in self._query_by_names(modules)])
         code = code + "\n\n" + script
 
@@ -58,7 +59,7 @@ class CodeCompute(BaseHandler):
             else:
                 self.response.out.write(result.content)
         except urlfetch.DownloadError:
-            self.response.out.write("timeout")
+            self.response.out.write(urlfetch.DownloadError.message())
 
 class CodeSpace(BaseHandler):
 
@@ -85,29 +86,30 @@ class CodeSpace(BaseHandler):
         d["author"] = self.user.name
         fid = hash('.'.join([d["author"], d["filename"]]))
 
-        logging.info(d)
-
         if d["filename"]:
             self.response.headers['Content-Type'] = 'application/json'
 
             item = self._query_item(fid)
-            
-            if d["fid"]!="None":    
-                if item and str(item.fid) == d["fid"]:
-                    d["fid"] = fid
-                    m = self._save(item, d)
-                    self.response.out.write(json.dumps({"info":m.modules, "fid":str(m.fid)}))
-            elif item:
-                self.response.out.write(json.dumps({"error":"name exists"}))
-            else:
-                k = ndb.Key('CodeBase', d["author"])
-                code = CodeBase(parent=k)
-                d["fid"] = fid
-                code = self._save(code, d)
+            clone = False
 
+            if item:
+                if str(item.fid) == d["fid"]:
+                    if item.author == d["author"]:
+                        m = self._save(item, d)
+                        self.response.out.write(json.dumps({"info":m.modules, "fid":str(m.fid)}))
+                    else:
+                        clone = True
+                else:
+                    self.response.out.write(json.dumps({"error":"name exists"}))
+            
+            if not item or clone:
+                d["fid"] = str(fid)
+                code = self._create(d)
                 d = code.to_dict()
                 d["date"] = d["date"].strftime("%Y-%m-%d")
+                d["fid"] = str(d["fid"])
                 self.response.out.write(json.dumps(d))
+                
 
 
 config = {
@@ -128,8 +130,5 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/signup', SignupHandler, name='signup'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
-      handler=VerificationHandler, name='verification'),
-    #('/', MainPage),
-    #('/code', CodeSpace),
-    #('/login', LoginHandler),
-], debug=True, config=config)
+      handler=VerificationHandler, name='verification')
+], debug=False, config=config)

@@ -50,6 +50,13 @@ input#fund {
     font-size: 10px;
 }
 
+#stats div{
+    display: inline-block;
+    width: 60px;
+    margin-top: 5px;
+    margin-left: 30px
+}
+
 #filename {
 
     padding-top: 3px;

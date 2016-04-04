@@ -2,11 +2,21 @@ indexes:
 - kind: CodeBase
   ancestor: yes
   properties:
-  - name: fid
-  - name: filename
-  - name: author
   - name: public
-  - name: protected
   - name: date
     direction: desc
+  - name: author
+  - name: fid
+  - name: filename
+  - name: protected
+
+- kind: CodeBase
+  properties:
+  - name: public
+  - name: date
+    direction: desc
+  - name: author
+  - name: fid
+  - name: filename
+  - name: protected
 
